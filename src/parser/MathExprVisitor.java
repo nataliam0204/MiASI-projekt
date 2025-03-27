@@ -11,6 +11,26 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface MathExprVisitor<T> extends ParseTreeVisitor<T> {
 	/**
+	 * Visit a parse tree produced by {@link MathExprParser#prog}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProg(MathExprParser.ProgContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ExpressionStmt}
+	 * labeled alternative in {@link MathExprParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpressionStmt(MathExprParser.ExpressionStmtContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code AbsExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAbsExpr(MathExprParser.AbsExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code MulDivExpr}
 	 * labeled alternative in {@link MathExprParser#expr}.
 	 * @param ctx the parse tree
@@ -65,4 +85,10 @@ public interface MathExprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunc(MathExprParser.FuncContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MathExprParser#relop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelop(MathExprParser.RelopContext ctx);
 }
