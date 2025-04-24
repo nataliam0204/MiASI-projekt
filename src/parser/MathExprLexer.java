@@ -1,4 +1,4 @@
-// Generated from /Users/nataliamaciewicz/Documents/studia/SM/SEM 1/MiASI/Projekt/Projekt_v1/src/grammar/MathExpr.g4 by ANTLR 4.13.2
+// Generated from C:/Users/julia/OneDrive/Pulpit/zajecia/mgr/1 sem/miasi/MiASI-projekt/src/grammar/MathExpr.g4 by ANTLR 4.13.2
 package parser;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
