@@ -1,3 +1,6 @@
+import be.ugent.caagt.jmathtex.TeXFormula;
+import be.ugent.caagt.jmathtex.TeXIcon;
+import be.ugent.caagt.jmathtex.TeXConstants;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import parser.*;
@@ -5,6 +8,7 @@ import converter.LatexVisitor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class GUI {
 
@@ -26,7 +30,7 @@ public class GUI {
         labelInput.setBounds(50, 50, 200, 25);
         labelInput.setForeground(textColor);
 
-        JTextField inputField = new JTextField();
+        JTextField inputField = new JTextField("(x+2)*y/4=2^(x)");
         inputField.setBounds(50, 80, 300, 30);
         inputField.setBackground(inputColor);
         inputField.setForeground(Color.BLACK);
@@ -66,6 +70,40 @@ public class GUI {
         saveButton.setBounds(550, 380, 300, 30);
         saveButton.setBackground(buttonColor);
         saveButton.setForeground(textColor);
+
+        confirmButton.addActionListener(e -> {
+            try {
+                String expr = inputField.getText();
+
+                // PARSER + VISITOR
+                CharStream cs = CharStreams.fromString(expr);
+                MathExprLexer lexer = new MathExprLexer(cs);
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                MathExprParser parser = new MathExprParser(tokens);
+                ParseTree tree = parser.prog();
+                LatexVisitor visitor = new LatexVisitor();
+                String latex = visitor.visit(tree);
+
+                // Wyświetl w polu tekstowym:
+                latexOutput.setText(latex);
+                latexOutput.setCaretPosition(0);
+
+                // Render do obrazu:
+                TeXFormula formula = new TeXFormula(latex);
+                TeXIcon icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20f);
+                icon.setInsets(new Insets(5, 5, 5, 5));
+
+                BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2 = image.createGraphics();
+                g2.setColor(Color.WHITE);
+                g2.fillRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
+                icon.paintIcon(new JLabel(), g2, 0, 0);
+                imageLabel.setIcon(new ImageIcon(image));
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame, "Błąd w LaTeX: " + ex.getMessage());
+            }
+        });
+
 
         frame.add(labelInput);
         frame.add(inputField);
