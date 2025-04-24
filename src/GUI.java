@@ -9,10 +9,14 @@ import converter.LatexVisitor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+
 
 public class GUI {
 
-    public GUI(){
+    public GUI() {
         JFrame frame = new JFrame("LaTeX Expression Formatter");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(900, 700);
@@ -71,14 +75,18 @@ public class GUI {
         saveButton.setBackground(buttonColor);
         saveButton.setForeground(textColor);
 
+        // Panel do przechowywania obrazów
+        JPanel iconPanel = new JPanel();
+        iconPanel.setLayout(new BoxLayout(iconPanel, BoxLayout.Y_AXIS));
+
         confirmButton.addActionListener(e -> {
             try {
                 String expr = inputField.getText();
 
                 String[] equations = expr.split(";");
 
-                JPanel iconPanel = new JPanel();
-                iconPanel.setLayout(new BoxLayout(iconPanel, BoxLayout.Y_AXIS));
+                // Resetowanie panelu przed dodaniem nowych obrazków
+                iconPanel.removeAll();
 
                 for (String equation : equations) {
                     CharStream cs = CharStreams.fromString(equation.trim());
@@ -109,11 +117,53 @@ public class GUI {
                 frame.add(scrollPane);
 
                 frame.revalidate();
+                System.out.println("Obrazy zostały wygenerowane i dodane do panelu.");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame, "Błąd w LaTeX: " + ex.getMessage());
             }
         });
 
+        // Obsługa przycisku "Zapisz obraz"
+        saveButton.addActionListener(e -> {
+            try {
+                // Pobieranie wszystkich generowanych obrazów
+                if (iconPanel.getComponentCount() > 0) {
+                    System.out.println("Znaleziono panel z obrazami.");
+                    for (int i = 0; i < iconPanel.getComponentCount(); i++) {
+                        JLabel generatedImageLabel = (JLabel) iconPanel.getComponent(i);
+                        ImageIcon icon = (ImageIcon) generatedImageLabel.getIcon();
+                        BufferedImage image = (BufferedImage) icon.getImage();
+
+                        // Wybór ścieżki zapisu obrazu
+                        JFileChooser fileChooser = new JFileChooser();
+                        fileChooser.setDialogTitle("Wybierz miejsce zapisu pliku");
+                        fileChooser.setSelectedFile(new File("rownanie" + (i + 1) + ".png"));
+                        int userSelection = fileChooser.showSaveDialog(frame);
+
+                        if (userSelection == JFileChooser.APPROVE_OPTION) {
+                            File fileToSave = fileChooser.getSelectedFile();
+
+                            // Upewniamy się, że plik ma rozszerzenie .png
+                            if (!fileToSave.getName().endsWith(".png")) {
+                                fileToSave = new File(fileToSave.getAbsolutePath() + ".png");
+                            }
+
+                            // Zapisz obraz
+                            try {
+                                ImageIO.write(image, "PNG", fileToSave);
+                                System.out.println("Zapisano obraz: " + fileToSave.getAbsolutePath());
+                            } catch (IOException ioException) {
+                                JOptionPane.showMessageDialog(frame, "Błąd zapisu obrazu: " + ioException.getMessage());
+                            }
+                        }
+                    }
+                } else {
+                    System.out.println("Brak wygenerowanych obrazów do zapisania.");
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame, "Błąd zapisu obrazów: " + ex.getMessage());
+            }
+        });
 
         frame.add(labelInput);
         frame.add(inputField);
