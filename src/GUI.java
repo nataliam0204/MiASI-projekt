@@ -75,30 +75,40 @@ public class GUI {
             try {
                 String expr = inputField.getText();
 
-                // PARSER + VISITOR
-                CharStream cs = CharStreams.fromString(expr);
-                MathExprLexer lexer = new MathExprLexer(cs);
-                CommonTokenStream tokens = new CommonTokenStream(lexer);
-                MathExprParser parser = new MathExprParser(tokens);
-                ParseTree tree = parser.prog();
-                LatexVisitor visitor = new LatexVisitor();
-                String latex = visitor.visit(tree);
+                String[] equations = expr.split(";");
 
-                // Wyświetl w polu tekstowym:
-                latexOutput.setText(latex);
-                latexOutput.setCaretPosition(0);
+                JPanel iconPanel = new JPanel();
+                iconPanel.setLayout(new BoxLayout(iconPanel, BoxLayout.Y_AXIS));
 
-                // Render do obrazu:
-                TeXFormula formula = new TeXFormula(latex);
-                TeXIcon icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20f);
-                icon.setInsets(new Insets(5, 5, 5, 5));
+                for (String equation : equations) {
+                    CharStream cs = CharStreams.fromString(equation.trim());
+                    MathExprLexer lexer = new MathExprLexer(cs);
+                    CommonTokenStream tokens = new CommonTokenStream(lexer);
+                    MathExprParser parser = new MathExprParser(tokens);
+                    ParseTree tree = parser.prog();
+                    LatexVisitor visitor = new LatexVisitor();
+                    String latex = visitor.visit(tree);
 
-                BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-                Graphics2D g2 = image.createGraphics();
-                g2.setColor(Color.WHITE);
-                g2.fillRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
-                icon.paintIcon(new JLabel(), g2, 0, 0);
-                imageLabel.setIcon(new ImageIcon(image));
+                    // Renderowanie LaTeX do obrazu
+                    TeXFormula formula = new TeXFormula(latex);
+                    TeXIcon icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20f);
+                    icon.setInsets(new Insets(5, 5, 5, 5));
+
+                    BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D g2 = image.createGraphics();
+                    g2.setColor(Color.WHITE);
+                    g2.fillRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
+                    icon.paintIcon(new JLabel(), g2, 0, 0);
+
+                    JLabel newImageLabel = new JLabel(new ImageIcon(image));
+                    iconPanel.add(newImageLabel);  // Dodanie do panelu
+                }
+
+                JScrollPane scrollPane = new JScrollPane(iconPanel);
+                scrollPane.setBounds(550, 220, 300, 150);
+                frame.add(scrollPane);
+
+                frame.revalidate();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame, "Błąd w LaTeX: " + ex.getMessage());
             }

@@ -11,7 +11,7 @@ public class LatexVisitor extends MathExprBaseVisitor<String> {
         for (int i = 0; i < ctx.statement().size(); i++) {
             sb.append(visit(ctx.statement(i)));
             if (i < ctx.statement().size() - 1) {
-                sb.append(" \\\\ "); // łamie wiersz w LaTeX (np. dla układu równań)
+                sb.append("\\\\ "); // łamie wiersz w LaTeX (np. dla układu równań)
             }
         }
         return sb.toString();
