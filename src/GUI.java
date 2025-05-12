@@ -79,14 +79,57 @@ public class GUI {
         JPanel iconPanel = new JPanel();
         iconPanel.setLayout(new BoxLayout(iconPanel, BoxLayout.Y_AXIS));
 
+
         confirmButton.addActionListener(e -> {
             try {
+                /*
+                String expr = inputField.getText();
+
+// Resetowanie panelu
+                iconPanel.removeAll();
+
+                CharStream cs = CharStreams.fromString(expr);
+                MathExprLexer lexer = new MathExprLexer(cs);
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                MathExprParser parser = new MathExprParser(tokens);
+                ParseTree tree = parser.prog();  // ← obsługuje wiele statementów oddzielonych ';'
+
+                LatexVisitor visitor = new LatexVisitor();
+                String latex = visitor.visit(tree);
+
+// Pokaż cały kod LaTeX w polu tekstowym
+                latexOutput.setText(latex);
+
+// Renderuj jako jeden obraz
+
+                System.out.println("DEBUG: Wygenerowany LaTeX = [" + latex + "]");
+                if (latex == null || latex.trim().isEmpty() || latex.trim().equals("\"")) {
+                    throw new IllegalArgumentException("Pusty lub błędny LaTeX: [" + latex + "]");
+                }
+
+                TeXFormula formula = new TeXFormula(latex);
+                TeXIcon icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20f);
+                icon.setInsets(new Insets(5, 5, 5, 5));
+
+                BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2 = image.createGraphics();
+                g2.setColor(Color.WHITE);
+                g2.fillRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
+                icon.paintIcon(new JLabel(), g2, 0, 0);
+
+                JLabel newImageLabel = new JLabel(new ImageIcon(image));
+                iconPanel.add(newImageLabel);
+                 */
+
+
                 String expr = inputField.getText();
 
                 String[] equations = expr.split(";");
 
                 // Resetowanie panelu przed dodaniem nowych obrazków
                 iconPanel.removeAll();
+
+                StringBuilder combinedLatex = new StringBuilder();
 
                 for (String equation : equations) {
                     CharStream cs = CharStreams.fromString(equation.trim());
@@ -96,6 +139,7 @@ public class GUI {
                     ParseTree tree = parser.prog();
                     LatexVisitor visitor = new LatexVisitor();
                     String latex = visitor.visit(tree);
+                    latexOutput.setText(latex);  // ⬅️ aktualizuje pole tekstowe z kodem LaTeX
 
                     // Renderowanie LaTeX do obrazu
                     TeXFormula formula = new TeXFormula(latex);
@@ -111,6 +155,8 @@ public class GUI {
                     JLabel newImageLabel = new JLabel(new ImageIcon(image));
                     iconPanel.add(newImageLabel);  // Dodanie do panelu
                 }
+
+
 
                 JScrollPane scrollPane = new JScrollPane(iconPanel);
                 scrollPane.setBounds(550, 220, 300, 150);
@@ -203,31 +249,3 @@ public class GUI {
         new GUI();
     }
 }
-
-/*
-import org.antlr.v4.runtime.*;
-        import org.antlr.v4.runtime.tree.*;
-        import parser.*;
-        import converter.LatexVisitor;
-
-public class GUI {
-    public static void main(String[] args) {
-        // Przykładowe wejście — możesz potem zmienić na to, co wpisuje użytkownik
-        String input = "(1 + 2) * sqrt(4)";
-
-        // Tworzenie strumienia znaków i uruchomienie parsera
-        CharStream cs = CharStreams.fromString(input);
-        MathExprLexer lexer = new MathExprLexer(cs);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        MathExprParser parser = new MathExprParser(tokens);
-        ParseTree tree = parser.expr();
-
-        // Uruchomienie odwiedzającego, który generuje kod LaTeX
-        LatexVisitor visitor = new LatexVisitor();
-        String latex = visitor.visit(tree);
-
-        // Wypisanie kodu LaTeX
-        System.out.println("LaTeX: " + latex);
-    }
-}
-*/

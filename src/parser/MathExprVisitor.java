@@ -1,4 +1,4 @@
-// Generated from C:/Users/julia/OneDrive/Pulpit/zajecia/mgr/1 sem/miasi/MiASI-projekt/src/grammar/MathExpr.g4 by ANTLR 4.13.2
+// Generated from /Users/nataliamaciewicz/Documents/studia/SM/SEM 1/MiASI/MiASI-projekt/src/grammar/MathExpr.g4 by ANTLR 4.13.2
 package parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -38,6 +38,20 @@ public interface MathExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMulDivExpr(MathExprParser.MulDivExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code EllipsisDiagonalExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEllipsisDiagonalExpr(MathExprParser.EllipsisDiagonalExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code EllipsisVerticalExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEllipsisVerticalExpr(MathExprParser.EllipsisVerticalExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code NumberExpr}
 	 * labeled alternative in {@link MathExprParser#expr}.
 	 * @param ctx the parse tree
@@ -59,6 +73,13 @@ public interface MathExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarExpr(MathExprParser.VarExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code MatrixExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMatrixExpr(MathExprParser.MatrixExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ParenExpr}
 	 * labeled alternative in {@link MathExprParser#expr}.
 	 * @param ctx the parse tree
@@ -79,6 +100,19 @@ public interface MathExprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAddSubExpr(MathExprParser.AddSubExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code EllipsisHorizontalExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEllipsisHorizontalExpr(MathExprParser.EllipsisHorizontalExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MathExprParser#row}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRow(MathExprParser.RowContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MathExprParser#func}.
 	 * @param ctx the parse tree

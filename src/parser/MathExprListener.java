@@ -1,4 +1,4 @@
-// Generated from C:/Users/julia/OneDrive/Pulpit/zajecia/mgr/1 sem/miasi/MiASI-projekt/src/grammar/MathExpr.g4 by ANTLR 4.13.2
+// Generated from /Users/nataliamaciewicz/Documents/studia/SM/SEM 1/MiASI/MiASI-projekt/src/grammar/MathExpr.g4 by ANTLR 4.13.2
 package parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -54,6 +54,30 @@ public interface MathExprListener extends ParseTreeListener {
 	 */
 	void exitMulDivExpr(MathExprParser.MulDivExprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code EllipsisDiagonalExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEllipsisDiagonalExpr(MathExprParser.EllipsisDiagonalExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EllipsisDiagonalExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEllipsisDiagonalExpr(MathExprParser.EllipsisDiagonalExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EllipsisVerticalExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEllipsisVerticalExpr(MathExprParser.EllipsisVerticalExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EllipsisVerticalExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEllipsisVerticalExpr(MathExprParser.EllipsisVerticalExprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code NumberExpr}
 	 * labeled alternative in {@link MathExprParser#expr}.
 	 * @param ctx the parse tree
@@ -90,6 +114,18 @@ public interface MathExprListener extends ParseTreeListener {
 	 */
 	void exitVarExpr(MathExprParser.VarExprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code MatrixExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterMatrixExpr(MathExprParser.MatrixExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MatrixExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitMatrixExpr(MathExprParser.MatrixExprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ParenExpr}
 	 * labeled alternative in {@link MathExprParser#expr}.
 	 * @param ctx the parse tree
@@ -125,6 +161,28 @@ public interface MathExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAddSubExpr(MathExprParser.AddSubExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EllipsisHorizontalExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEllipsisHorizontalExpr(MathExprParser.EllipsisHorizontalExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EllipsisHorizontalExpr}
+	 * labeled alternative in {@link MathExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEllipsisHorizontalExpr(MathExprParser.EllipsisHorizontalExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MathExprParser#row}.
+	 * @param ctx the parse tree
+	 */
+	void enterRow(MathExprParser.RowContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MathExprParser#row}.
+	 * @param ctx the parse tree
+	 */
+	void exitRow(MathExprParser.RowContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MathExprParser#func}.
 	 * @param ctx the parse tree

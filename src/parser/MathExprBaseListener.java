@@ -1,4 +1,4 @@
-// Generated from C:/Users/julia/OneDrive/Pulpit/zajecia/mgr/1 sem/miasi/MiASI-projekt/src/grammar/MathExpr.g4 by ANTLR 4.13.2
+// Generated from /Users/nataliamaciewicz/Documents/studia/SM/SEM 1/MiASI/MiASI-projekt/src/grammar/MathExpr.g4 by ANTLR 4.13.2
 package parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -65,6 +65,30 @@ public class MathExprBaseListener implements MathExprListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterEllipsisDiagonalExpr(MathExprParser.EllipsisDiagonalExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEllipsisDiagonalExpr(MathExprParser.EllipsisDiagonalExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEllipsisVerticalExpr(MathExprParser.EllipsisVerticalExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEllipsisVerticalExpr(MathExprParser.EllipsisVerticalExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNumberExpr(MathExprParser.NumberExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -101,6 +125,18 @@ public class MathExprBaseListener implements MathExprListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMatrixExpr(MathExprParser.MatrixExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMatrixExpr(MathExprParser.MatrixExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterParenExpr(MathExprParser.ParenExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -132,6 +168,30 @@ public class MathExprBaseListener implements MathExprListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAddSubExpr(MathExprParser.AddSubExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEllipsisHorizontalExpr(MathExprParser.EllipsisHorizontalExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEllipsisHorizontalExpr(MathExprParser.EllipsisHorizontalExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRow(MathExprParser.RowContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRow(MathExprParser.RowContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
