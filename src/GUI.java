@@ -8,10 +8,12 @@ import converter.LatexVisitor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 
 public class GUI {
@@ -79,6 +81,13 @@ public class GUI {
         instructionButton.setBounds(750, 20, 120, 30);
         instructionButton.setBackground(new Color(0x3A3A3A));
         instructionButton.setForeground(textColor);
+
+        JButton greekButton = new JButton("Symbole greckie");
+        greekButton.setBounds(50, 140, 150, 30);
+        greekButton.setBackground(buttonColor);
+        greekButton.setForeground(textColor);
+
+
 
         // Panel do przechowywania obrazów
         JPanel iconPanel = new JPanel();
@@ -210,6 +219,91 @@ public class GUI {
 
             JOptionPane.showMessageDialog(frame, message, "Instrukcja", JOptionPane.INFORMATION_MESSAGE);
         });
+        greekButton.addActionListener(e -> {
+            JDialog greekDialog = new JDialog(frame, "Symbole greckie", false);
+            greekDialog.setSize(500, 300);
+
+            JPanel gridPanel = new JPanel();
+            gridPanel.setLayout(new GridLayout(0, 6, 5, 5)); // dynamiczna liczba wierszy, 6 kolumn
+
+            Map<String, String> greekLetters = Map.ofEntries(
+                    Map.entry("alfa", "alpha"),
+                    Map.entry("beta", "beta"),
+                    Map.entry("gamma", "gamma"),
+                    Map.entry("delta", "delta"),
+                    Map.entry("epsilon", "epsilon"),
+                    Map.entry("zeta", "zeta"),
+                    Map.entry("eta", "eta"),
+                    Map.entry("theta", "theta"),
+                    Map.entry("iota", "iota"),
+                    Map.entry("kappa", "kappa"),
+                    Map.entry("lambda", "lambda"),
+                    Map.entry("mu", "mu"),
+                    Map.entry("nu", "nu"),
+                    Map.entry("xi", "xi"),
+                    Map.entry("omicron", "omicron"),
+                    Map.entry("pi", "pi"),
+                    Map.entry("rho", "rho"),
+                    Map.entry("sigma", "sigma"),
+                    Map.entry("tau", "tau"),
+                    Map.entry("upsilon", "upsilon"),
+                    Map.entry("phi", "phi"),
+                    Map.entry("chi", "chi"),
+                    Map.entry("psi", "psi"),
+                    Map.entry("omega", "omega"),
+                    Map.entry("Gamma", "Gamma"),
+                    Map.entry("Delta", "Delta"),
+                    Map.entry("Theta", "Theta"),
+                    Map.entry("Lambda", "Lambda"),
+                    Map.entry("Xi", "Xi"),
+                    Map.entry("Pi", "Pi"),
+                    Map.entry("Sigma", "Sigma"),
+                    Map.entry("Upsilon", "Upsilon"),
+                    Map.entry("Phi", "Phi"),
+                    Map.entry("Psi", "Psi"),
+                    Map.entry("Omega", "Omega")
+            );
+
+            List<String> greekOrder = List.of(
+                    "alfa", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta", "iota", "kappa",
+                    "lambda", "mu", "nu", "xi", "omicron", "pi", "rho", "sigma", "tau", "upsilon",
+                    "phi", "chi", "psi", "omega",
+                    "Gamma", "Delta", "Theta", "Lambda", "Xi", "Pi", "Sigma", "Upsilon", "Phi", "Psi", "Omega"
+            );
+
+            for (String word : greekOrder) {
+                String latex = greekLetters.get(word);
+
+                TeXFormula formula = new TeXFormula("\\" + latex);
+                TeXIcon icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 18f);
+                icon.setInsets(new Insets(2, 2, 2, 2));
+
+                JButton symbolButton = new JButton();
+                symbolButton.setIcon(icon);
+                symbolButton.setToolTipText(word);
+                symbolButton.setFocusPainted(false);
+                symbolButton.setMargin(new Insets(2, 2, 2, 2));
+                symbolButton.setBackground(new Color(0x424242));  // ciemnoszary
+                symbolButton.setForeground(Color.WHITE);          // biały tekst
+
+
+                symbolButton.addActionListener(ae -> {
+                    inputField.setText(inputField.getText() + word);
+                });
+
+                gridPanel.add(symbolButton);
+            }
+
+
+
+            JScrollPane scrollPane = new JScrollPane(gridPanel);
+            greekDialog.add(scrollPane);
+            greekDialog.setLocationRelativeTo(frame);
+            greekDialog.setVisible(true);
+        });
+
+
+
 
         frame.add(instructionButton);
         frame.add(labelInput);
@@ -221,6 +315,7 @@ public class GUI {
         frame.add(copyButton);
         frame.add(imageLabel);
         frame.add(saveButton);
+        frame.add(greekButton);
 
         frame.setVisible(true);
     }
