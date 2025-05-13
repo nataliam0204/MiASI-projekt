@@ -3,7 +3,48 @@ package converter;
 import parser.MathExprBaseVisitor;
 import parser.MathExprParser;
 
+import java.util.Map;
+
 public class LatexVisitor extends MathExprBaseVisitor<String> {
+
+    private static final Map<String, String> GREEK_LETTERS = Map.ofEntries(
+            Map.entry("alfa", "\\alpha"),
+            Map.entry("beta", "\\beta"),
+            Map.entry("gamma", "\\gamma"),
+            Map.entry("delta", "\\delta"),
+            Map.entry("epsilon", "\\epsilon"),
+            Map.entry("zeta", "\\zeta"),
+            Map.entry("eta", "\\eta"),
+            Map.entry("theta", "\\theta"),
+            Map.entry("iota", "\\iota"),
+            Map.entry("kappa", "\\kappa"),
+            Map.entry("lambda", "\\lambda"),
+            Map.entry("mu", "\\mu"),
+            Map.entry("nu", "\\nu"),
+            Map.entry("xi", "\\xi"),
+            Map.entry("omicron", "\\omicron"),
+            Map.entry("pi", "\\pi"),
+            Map.entry("rho", "\\rho"),
+            Map.entry("sigma", "\\sigma"),
+            Map.entry("tau", "\\tau"),
+            Map.entry("upsilon", "\\upsilon"),
+            Map.entry("phi", "\\phi"),
+            Map.entry("chi", "\\chi"),
+            Map.entry("psi", "\\psi"),
+            Map.entry("omega", "\\omega"),
+            // wielkie litery
+            Map.entry("Gamma", "\\Gamma"),
+            Map.entry("Delta", "\\Delta"),
+            Map.entry("Theta", "\\Theta"),
+            Map.entry("Lambda", "\\Lambda"),
+            Map.entry("Xi", "\\Xi"),
+            Map.entry("Pi", "\\Pi"),
+            Map.entry("Sigma", "\\Sigma"),
+            Map.entry("Upsilon", "\\Upsilon"),
+            Map.entry("Phi", "\\Phi"),
+            Map.entry("Psi", "\\Psi"),
+            Map.entry("Omega", "\\Omega")
+    );
 
     @Override
     public String visitProg(MathExprParser.ProgContext ctx) {
@@ -76,7 +117,8 @@ public class LatexVisitor extends MathExprBaseVisitor<String> {
 
     @Override
     public String visitVarExpr(MathExprParser.VarExprContext ctx) {
-        return ctx.getText();
+        String varName = ctx.getText();
+        return GREEK_LETTERS.getOrDefault(varName, varName); //jeśli klucz istnieje, to wartość według klucza, jak nie to varName
     }
 
     @Override

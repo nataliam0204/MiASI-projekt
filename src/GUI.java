@@ -75,6 +75,11 @@ public class GUI {
         saveButton.setBackground(buttonColor);
         saveButton.setForeground(textColor);
 
+        JButton instructionButton = new JButton("Instrukcja");
+        instructionButton.setBounds(750, 20, 120, 30);
+        instructionButton.setBackground(new Color(0x3A3A3A));
+        instructionButton.setForeground(textColor);
+
         // Panel do przechowywania obrazów
         JPanel iconPanel = new JPanel();
         iconPanel.setLayout(new BoxLayout(iconPanel, BoxLayout.Y_AXIS));
@@ -82,7 +87,7 @@ public class GUI {
         confirmButton.addActionListener(e -> {
             try {
                 String expr = inputField.getText();
-
+                StringBuilder latexBuilder = new StringBuilder();
                 String[] equations = expr.split(";");
 
                 // Resetowanie panelu przed dodaniem nowych obrazków
@@ -96,6 +101,7 @@ public class GUI {
                     ParseTree tree = parser.prog();
                     LatexVisitor visitor = new LatexVisitor();
                     String latex = visitor.visit(tree);
+                    latexBuilder.append(latex).append("\n");
 
                     // Renderowanie LaTeX do obrazu
                     TeXFormula formula = new TeXFormula(latex);
@@ -115,6 +121,8 @@ public class GUI {
                 JScrollPane scrollPane = new JScrollPane(iconPanel);
                 scrollPane.setBounds(550, 220, 300, 150);
                 frame.add(scrollPane);
+
+                latexOutput.setText(latexBuilder.toString());
 
                 frame.revalidate();
                 System.out.println("Obrazy zostały wygenerowane i dodane do panelu.");
@@ -165,6 +173,45 @@ public class GUI {
             }
         });
 
+        fileButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Wybierz plik tekstowy");
+
+            int result = fileChooser.showOpenDialog(frame);
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                try {
+                    // Wczytanie zawartości pliku jako String
+                    String content = new String(java.nio.file.Files.readAllBytes(selectedFile.toPath()));
+                    inputField.setText(content);
+                    System.out.println("Załadowano plik: " + selectedFile.getAbsolutePath());
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(frame, "Błąd wczytywania pliku: " + ex.getMessage());
+                }
+            }
+        });
+        instructionButton.addActionListener(e -> {
+            String message = "Instrukcja korzystania z konwertera:\n\n" +
+                    "- Używaj operatorów:\n" +
+                    "  +  dodawanie\n" +
+                    "  -  odejmowanie\n" +
+                    "  *  mnożenie\n" +
+                    "  /  dzielenie\n" +
+                    "  ^  potęgowanie\n" +
+                    "  |x|  wartość bezwzględna\n\n" +
+                    "- Funkcje obsługiwane: sqrt, log, ln, sin, cos, tan\n\n" +
+                    "- Greckie litery wpisuj słownie:\n" +
+                    "  alpha, beta, gamma, delta, epsilon, theta, lambda, pi, sigma, omega\n" +
+                    "  (wielkie litery: Alpha, Beta, Gamma, ...)\n\n" +
+                    "- Kilka równań oddziel średnikami (;)\n\n" +
+                    "Przykład:\n" +
+                    "alpha + beta = gamma; sqrt(4) + log(10) >= x";
+
+            JOptionPane.showMessageDialog(frame, message, "Instrukcja", JOptionPane.INFORMATION_MESSAGE);
+        });
+
+        frame.add(instructionButton);
         frame.add(labelInput);
         frame.add(inputField);
         frame.add(orLabel);
