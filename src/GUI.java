@@ -100,12 +100,30 @@ public class GUI {
 // Reset panelu z ikonami
                 iconPanel.removeAll();
 
+                // Inicjalizacja listenera błędów
+                CustomErrorListener errorListener = new CustomErrorListener();
+
 // Parsowanie CAŁOŚCI jako prog
                 CharStream cs = CharStreams.fromString(expr);
                 MathExprLexer lexer = new MathExprLexer(cs);
+                lexer.removeErrorListeners();
+                lexer.addErrorListener(errorListener);
+
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
                 MathExprParser parser = new MathExprParser(tokens);
+                parser.removeErrorListeners();
+                parser.addErrorListener(errorListener);
+
                 ParseTree tree = parser.prog();
+
+                if (errorListener.hasErrors()) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Wykryto błędy składni:\n" + errorListener.getErrors(),
+                            "Błąd składni",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 LatexVisitor visitor = new LatexVisitor();
                 String latex = visitor.visit(tree);
 
@@ -145,7 +163,8 @@ public class GUI {
 
                 System.out.println("Obrazy zostały wygenerowane i dodane do panelu.");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(frame, "Błąd w LaTeX: " + ex.getMessage());
+                JOptionPane.showMessageDialog(frame, "Nieoczekiwany błąd: " + ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
             }
         });
 
