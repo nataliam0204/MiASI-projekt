@@ -1,0 +1,21 @@
+group latex;
+
+add(left, right) ::= "<left> + <right>"
+sub(left, right) ::= "<left> - <right>"
+mul(left, right) ::= "<left> \\cdot <right>"
+divFrac(left, right) ::= "\\frac{<left>}{<right>}"
+divSlash(left, right) ::= "<left> / <right>"
+pow(base, exponent) ::= "<base>^{<exponent>}"
+abs(value) ::= "\\left|<value>\\right|"
+func(name, arg) ::= "\\<name>{<arg>}"
+paren(value) ::= "(<value>)"
+
+matrix(rows) ::= <<\begin{bmatrix}<rows; separator=" \\\\ ">\end{bmatrix}>>
+
+
+
+
+
+ellipsisHorizontal() ::= "\\cdots"
+ellipsisVertical() ::= "\\vdots"
+ellipsisDiagonal() ::= "\\ddots"

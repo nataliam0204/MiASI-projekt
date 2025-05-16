@@ -1,6 +1,6 @@
-import be.ugent.caagt.jmathtex.TeXFormula;
-import be.ugent.caagt.jmathtex.TeXIcon;
-import be.ugent.caagt.jmathtex.TeXConstants;
+import org.scilab.forge.jlatexmath.TeXFormula;
+import org.scilab.forge.jlatexmath.TeXIcon;
+import org.scilab.forge.jlatexmath.TeXConstants;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import parser.*;
@@ -96,44 +96,53 @@ public class GUI {
         confirmButton.addActionListener(e -> {
             try {
                 String expr = inputField.getText();
-                StringBuilder latexBuilder = new StringBuilder();
-                String[] equations = expr.split(";");
 
-                // Resetowanie panelu przed dodaniem nowych obrazków
+// Reset panelu z ikonami
                 iconPanel.removeAll();
 
-                for (String equation : equations) {
-                    CharStream cs = CharStreams.fromString(equation.trim());
-                    MathExprLexer lexer = new MathExprLexer(cs);
-                    CommonTokenStream tokens = new CommonTokenStream(lexer);
-                    MathExprParser parser = new MathExprParser(tokens);
-                    ParseTree tree = parser.prog();
-                    LatexVisitor visitor = new LatexVisitor();
-                    String latex = visitor.visit(tree);
-                    latexBuilder.append(latex).append("\n");
+// Parsowanie CAŁOŚCI jako prog
+                CharStream cs = CharStreams.fromString(expr);
+                MathExprLexer lexer = new MathExprLexer(cs);
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                MathExprParser parser = new MathExprParser(tokens);
+                ParseTree tree = parser.prog();
+                LatexVisitor visitor = new LatexVisitor();
+                String latex = visitor.visit(tree);
 
-                    // Renderowanie LaTeX do obrazu
-                    TeXFormula formula = new TeXFormula(latex);
-                    TeXIcon icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20f);
-                    icon.setInsets(new Insets(5, 5, 5, 5));
+                StringBuilder combinedLatex = new StringBuilder();
+// Dziel po \n - wcześniej było dzielone po "\\" który znajduje się w środku macierzy w latechu - dlatego nie chciały się rysować macierze. Musi tak zostać
+                String[] latexLines = latex.split("\n"); // podział po LaTeXowym złamaniu linii
 
-                    BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-                    Graphics2D g2 = image.createGraphics();
-                    g2.setColor(Color.WHITE);
-                    g2.fillRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
-                    icon.paintIcon(new JLabel(), g2, 0, 0);
+                //tak musi być do obrazka!!!
+                for (String line : latexLines) {
+                    line = line.trim();
+                    if (!line.isEmpty()) {
+                        combinedLatex.append(line).append(" \\\\\n");
 
-                    JLabel newImageLabel = new JLabel(new ImageIcon(image));
-                    iconPanel.add(newImageLabel);  // Dodanie do panelu
+                        TeXFormula formula = new TeXFormula(line);
+                        TeXIcon icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20f);
+                        icon.setInsets(new Insets(5, 5, 5, 5));
+
+                        BufferedImage image = new BufferedImage(
+                                icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+                        Graphics2D g2 = image.createGraphics();
+                        g2.setColor(Color.WHITE);
+                        g2.fillRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
+                        icon.paintIcon(new JLabel(), g2, 0, 0);
+
+                        JLabel newImageLabel = new JLabel(new ImageIcon(image));
+                        iconPanel.add(newImageLabel);
+                    }
                 }
 
                 JScrollPane scrollPane = new JScrollPane(iconPanel);
                 scrollPane.setBounds(550, 220, 300, 150);
                 frame.add(scrollPane);
 
-                latexOutput.setText(latexBuilder.toString());
-
+// Wstawienie całościowego LaTeX-a do textarea
+                latexOutput.setText(latex);
                 frame.revalidate();
+
                 System.out.println("Obrazy zostały wygenerowane i dodane do panelu.");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame, "Błąd w LaTeX: " + ex.getMessage());
@@ -206,16 +215,25 @@ public class GUI {
                     "  +  dodawanie\n" +
                     "  -  odejmowanie\n" +
                     "  *  mnożenie\n" +
-                    "  /  dzielenie\n" +
+                    "  /  dzielenie (piętrowy ułamek)\n" +
+                    "  :  dzielenie ukośnikowe (np. 1:2 = 1/2)\n" +
                     "  ^  potęgowanie\n" +
                     "  |x|  wartość bezwzględna\n\n" +
-                    "- Funkcje obsługiwane: sqrt, log, ln, sin, cos, tan\n\n" +
-                    "- Greckie litery wpisuj słownie:\n" +
-                    "  alpha, beta, gamma, delta, epsilon, theta, lambda, pi, sigma, omega\n" +
-                    "  (wielkie litery: Alpha, Beta, Gamma, ...)\n\n" +
+                    "- Funkcje obsługiwane: sqrt, log, ln, sin, cos, tan\n" +
+                    "  np. sqrt(4), sin(x), log(10)\n\n" +
+                    "- Greckie litery wybierz z palety znaków greckich lub wpisuj słownie:\n" +
+                    "  alfa, beta, gamma, delta, epsilon, theta, lambda, pi, sigma, omega\n" +
+                    "  (wielkie litery: Sigma, Gamma, Theta, ...)\n\n" +
+                    "- Obsługiwane są macierze w nawiasach kwadratowych:\n" +
+                    "  np. [1 2, 3 4] lub [a b c, d e f]\n\n" +
+                    "- Obsługiwane są wielokropki:\n" +
+                    "  ...  (poziomo),  :..  (pionowo),  \\..  (ukośnie)\n\n" +
+                    "- Używaj nawiasów ( ) do grupowania wyrażeń, np. (a + b)^2\n\n" +
+                    "- Nazwy zmiennych: dowolne litery, np. x, y, t lub słowa np. total\n\n" +
                     "- Kilka równań oddziel średnikami (;)\n\n" +
                     "Przykład:\n" +
-                    "alpha + beta = gamma; sqrt(4) + log(10) >= x";
+                    "alfa + beta = gamma; sqrt(4) + log(10) >= x; [1 2; 3 4] * x = y";
+
 
             JOptionPane.showMessageDialog(frame, message, "Instrukcja", JOptionPane.INFORMATION_MESSAGE);
         });
